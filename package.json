@@ -9,7 +9,7 @@
     "build": "tsc"
   },
   "keywords": [
-    "node-jdbc-driver"
+    "node-jdbc-driver, node, jdbc, node-jdbc, jdbc-driver"
   ],
   "author": "jay",
   "license": "ISC",
