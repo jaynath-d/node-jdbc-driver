@@ -1,0 +1,24 @@
+{
+  "name": "node-jdbc-driver",
+  "version": "1.0.0",
+  "description": "This package is help to use jdbc connection",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "test": "ts-node src/test.ts",
+    "build": "tsc"
+  },
+  "keywords": [
+    "node-jdbc-driver"
+  ],
+  "author": "jay",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.2.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "jdbc": "^0.7.6"
+  }
+}
