@@ -6,10 +6,6 @@ name: publish
 on:
   release:
     types: [created]
-  push:
-    branches: [ "main" ]
-    # Publish semver tags as releases.
-    tags: [ 'v*.*.*' ]
 
 jobs:
   build:
