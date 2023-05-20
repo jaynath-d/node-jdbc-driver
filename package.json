@@ -1,6 +1,6 @@
 {
   "name": "node-jdbc-driver",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "This package is help to use jdbc connection",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -9,7 +9,13 @@
     "build": "tsc"
   },
   "keywords": [
-    "node-jdbc-driver, node, jdbc, node-jdbc, jdbc-driver"
+    "node-jdbc-driver",
+    "node",
+    "jdbc",
+    "node-jdbc",
+    "jdbc-driver"
+    "hive-jdbc"
+    "postgre"
   ],
   "author": "jay",
   "license": "ISC",
