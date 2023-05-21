@@ -2,7 +2,7 @@
 JDBC API Wrapper for node.js
 
 ## Latest Version
-- 1.0.8
+- 1.0.9
 
 ## Installation
 - Release: ```npm i --save node-jdbc-driver```
@@ -16,7 +16,7 @@ import JdbcDriver, { ConnectionType } from 'node-jdbc-driver'
 
 // Set the connection details for the JDBC connection
 const host = '<host>';
-const port = <port>;
+const port = '<port>';
 const database = '<database_name>';
 const username = '<username>';
 const password = '<password>';
