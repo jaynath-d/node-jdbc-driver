@@ -2,7 +2,7 @@
 JDBC API Wrapper for node.js
 
 ## Latest Version
-- 1.0.6
+- 1.0.7
 
 ## Installation
 - Release: ```npm i --save node-jdbc-driver```
