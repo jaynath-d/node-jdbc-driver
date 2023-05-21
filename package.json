@@ -17,8 +17,6 @@
     "hive-jdbc",
     "postgre"
   ],
-  "author": "jay",
-  "license": "ISC",
   "devDependencies": {
     "@types/node": "^20.2.1",
     "ts-node": "^10.9.1",
@@ -26,5 +24,12 @@
   },
   "dependencies": {
     "jdbc": "^0.7.6"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jaynath-d/node-jdbc-driver.git"
+  },
+  "author": "Jaynath Ray <pcode027@gmail.com>",
+  "license": "ISC",
+  "readmeFilename": "README.md"
 }
