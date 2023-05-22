@@ -5,4 +5,6 @@ export default interface IDrivers {
     count: (tableName:string) => object;
     sql: (sql:string) => object;
     get_version: () => string;
+    get_columns: (tableName:string) => object;
+    get_table_properties: (tableName:string) => object;
 }
