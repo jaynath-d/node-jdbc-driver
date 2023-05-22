@@ -2,7 +2,7 @@
 JDBC API Wrapper for node.js
 
 ## Latest Version
-- 1.0.9
+- 1.1.0
 
 ## Installation
 - Release: ```npm i --save node-jdbc-driver```
@@ -12,6 +12,9 @@ Some mininal examples are given below.
 
 ### Initialize
 ```javascript
+// CommonJS
+const { default: JdbcDriver, ConnectionType } = require("node-jdbc-driver")
+// ES6
 import JdbcDriver, { ConnectionType } from 'node-jdbc-driver'
 
 // Set the connection details for the JDBC connection
@@ -42,6 +45,12 @@ const rows = await jdbc.findAll('<table_name>')
 
 // sql example
 const results = await jdbc.sql('<sql_query>')
+
+// list table columns
+const columns = await jdbc.get_columns('<table_name>')
+
+// describe table properties
+const tblproperties = await jdbc.get_table_properties('<table_name>')
 ```
 
 
