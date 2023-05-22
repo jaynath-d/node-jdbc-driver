@@ -1,5 +1,5 @@
 // Import interface
-import IConnectionType from "./IConnectionType";
+import IConnectionType, { QueryType } from "./IConnectionType";
 import IConnectionConfig from "./IConnectionConfig";
 import IDrivers from "./IDrivers";
 
@@ -39,17 +39,12 @@ export default class JdbcDriver implements IDrivers{
         JdbcDriver.connection.set('test', connection)
     }
 
-    public find = async (tableName: string, where: number|string = 1) => {
-        return this.sql(`SELECT * FROM ${tableName} WHERE ${where}`)
-    }
-
-    public findAll = async (tableName:string) => {
-        return this.sql(`SELECT * FROM ${tableName}`)
-    }
-
-    public count = async (tableName: any) => {
-        return this.sql(`SELECT COUNT(*)  from ${tableName}`)
-    }
+    public get_version = () => this.driverInstance.get_version();
+    public get_columns = async (tableName: string) => await this.sql(this.driverInstance.get_query(tableName, QueryType.columns))
+    public get_table_properties = async (tableName: string) => await this.sql(this.driverInstance.get_query(tableName, QueryType.describe))
+    public findAll = async (tableName:string) => await this.sql(`SELECT * FROM ${tableName}`)
+    public count = async (tableName: any) => await this.sql(`SELECT COUNT(*)  from ${tableName}`)
+    public find = async (tableName: string, where: number|string = 1) => await this.sql(`SELECT * FROM ${tableName} WHERE ${where}`)
 
     public sql = async (sql:string) => {
         try{
@@ -60,8 +55,6 @@ export default class JdbcDriver implements IDrivers{
         }
 
     }
-
-    public get_version = () => this.driverInstance.get_version();
 
     // protected close =async () => {
     //     try{
