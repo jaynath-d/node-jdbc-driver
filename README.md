@@ -50,7 +50,7 @@ const results = await jdbc.sql('<sql_query>')
 const columns = await jdbc.get_columns('<table_name>')
 
 // describe table properties
-const columns = await jdbc.get_table_properties('<table_name>')
+const tblproperties = await jdbc.get_table_properties('<table_name>')
 ```
 
 
