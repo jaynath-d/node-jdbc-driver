@@ -45,6 +45,12 @@ const rows = await jdbc.findAll('<table_name>')
 
 // sql example
 const results = await jdbc.sql('<sql_query>')
+
+// list table columns
+const columns = await jdbc.get_columns('<table_name>')
+
+// describe table properties
+const columns = await jdbc.get_table_properties('<table_name>')
 ```
 
 
