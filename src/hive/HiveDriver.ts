@@ -1,4 +1,4 @@
-import IConnectionType from '../IConnectionType';
+import IConnectionType, { QueryType } from '../IConnectionType';
 import IConnectionConfig from '../IConnectionConfig';
 
 export default class HiveDriver implements IConnectionType{
@@ -20,6 +20,14 @@ export default class HiveDriver implements IConnectionType{
     }
 
     public get_version = () => this.driverVersion;
+
+    public get_query = (tableName:string, type: string = 'D') => {
+        if(QueryType.columns == type){
+            return `DESCRIBE ${tableName}`
+        }else{
+            return `SHOW tblproperties ${tableName}`
+        }
+    }
 
     protected get_jdbcUrl = () => {
         const {host, port, database, } = this.config
