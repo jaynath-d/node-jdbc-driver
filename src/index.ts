@@ -76,6 +76,10 @@ export default class JdbcDriver implements IDrivers{
                     await resultset.toObjArray((err:any, rows: any) => {
                         if (err) reject(err)
                         else resolve(rows)
+                        statement.close((err:any)=> {
+                            if(err) console.log('Statement closing issues::::')
+                            else console.log('Statement closed')
+                        })
                     })                    
                 }
             })
