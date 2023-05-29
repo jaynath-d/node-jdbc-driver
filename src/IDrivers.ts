@@ -7,4 +7,6 @@ export default interface IDrivers {
     get_version: () => string;
     get_columns: (tableName:string) => object;
     get_table_properties: (tableName:string) => object;
+    connection_count: () => number;
+    connection_details: () => Array<object>;
 }
