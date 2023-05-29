@@ -45,6 +45,8 @@ export default class JdbcDriver implements IDrivers{
     public findAll = async (tableName:string) => await this.sql(`SELECT * FROM ${tableName}`)
     public count = async (tableName: any) => await this.sql(`SELECT COUNT(*)  from ${tableName}`)
     public find = async (tableName: string, where: number|string = 1) => await this.sql(`SELECT * FROM ${tableName} WHERE ${where}`)
+    public connection_count = () => JdbcDriver.connection.size;
+    public connection_details = () => JdbcDriver.connection.entries();
 
     public sql = async (sql:string) => {
         try{
