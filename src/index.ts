@@ -29,14 +29,16 @@ export default class JdbcDriver implements IDrivers{
     protected jarPath = '../drivers/';
     protected static connection: any = new Map();
     protected driverInstance:IConnectionType;
+    protected type: ConnectionType;
     constructor(type: ConnectionType, connectionConfig: IConnectionConfig) {
+        this.type = type
         this.driverInstance = new CType[type](connectionConfig)
         if (!jinst.isJvmCreated()) {
             jinst.addOption('-Xrs');
             jinst.setupClasspath([path.join(__dirname, this.jarPath + this.driverInstance.driver)]);
         }
         const connection = new jdbc(this.driverInstance.get_config())
-        JdbcDriver.connection.set('test', connection)
+        JdbcDriver.connection.set(this.type, connection)
     }
 
     public get_version = () => this.driverInstance.get_version();
@@ -45,6 +47,8 @@ export default class JdbcDriver implements IDrivers{
     public findAll = async (tableName:string) => await this.sql(`SELECT * FROM ${tableName}`)
     public count = async (tableName: any) => await this.sql(`SELECT COUNT(*)  from ${tableName}`)
     public find = async (tableName: string, where: number|string = 1) => await this.sql(`SELECT * FROM ${tableName} WHERE ${where}`)
+    public connection_count = () => JdbcDriver.connection.size;
+    public connection_details = () => JdbcDriver.connection.entries();
 
     public sql = async (sql:string) => {
         try{
@@ -76,6 +80,10 @@ export default class JdbcDriver implements IDrivers{
                     await resultset.toObjArray((err:any, rows: any) => {
                         if (err) reject(err)
                         else resolve(rows)
+                        statement.close((err:any)=> {
+                            if(err) console.log('Statement closing issues::::')
+                            else console.log('Statement closed')
+                        })
                     })                    
                 }
             })
@@ -100,7 +108,7 @@ export default class JdbcDriver implements IDrivers{
 
     protected open = async () => {
         return new Promise(async (resolve, reject) => {
-            const connection = JdbcDriver.connection.get('test')
+            const connection = JdbcDriver.connection.get(this.type)
             if (this.is_init(connection)){
                 resolve(connection._reserved[0])            
             }else{
@@ -126,7 +134,7 @@ export default class JdbcDriver implements IDrivers{
                 console.log(err);
                 return;
             }
-            JdbcDriver.connection.set('test', connection)
+            JdbcDriver.connection.set(this.type, connection)
         })
     }
 }
