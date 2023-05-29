@@ -29,14 +29,16 @@ export default class JdbcDriver implements IDrivers{
     protected jarPath = '../drivers/';
     protected static connection: any = new Map();
     protected driverInstance:IConnectionType;
+    protected type: ConnectionType;
     constructor(type: ConnectionType, connectionConfig: IConnectionConfig) {
+        this.type = type
         this.driverInstance = new CType[type](connectionConfig)
         if (!jinst.isJvmCreated()) {
             jinst.addOption('-Xrs');
             jinst.setupClasspath([path.join(__dirname, this.jarPath + this.driverInstance.driver)]);
         }
         const connection = new jdbc(this.driverInstance.get_config())
-        JdbcDriver.connection.set('test', connection)
+        JdbcDriver.connection.set(this.type, connection)
     }
 
     public get_version = () => this.driverInstance.get_version();
@@ -106,7 +108,7 @@ export default class JdbcDriver implements IDrivers{
 
     protected open = async () => {
         return new Promise(async (resolve, reject) => {
-            const connection = JdbcDriver.connection.get('test')
+            const connection = JdbcDriver.connection.get(this.type)
             if (this.is_init(connection)){
                 resolve(connection._reserved[0])            
             }else{
@@ -132,7 +134,7 @@ export default class JdbcDriver implements IDrivers{
                 console.log(err);
                 return;
             }
-            JdbcDriver.connection.set('test', connection)
+            JdbcDriver.connection.set(this.type, connection)
         })
     }
 }
