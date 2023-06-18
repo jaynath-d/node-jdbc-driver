@@ -60,16 +60,33 @@ export default class JdbcDriver implements IDrivers{
 
     }
 
-    // protected close =async () => {
-    //     try{
-    //         const connection = JdbcDriver.connection.get('test')
-    //         if(this.is_init(connection)){
+    protected close = () => {
+        try{
+            const coon = JdbcDriver.connection.get(this.type)
+            if(coon){
+                if(coon._reserved && coon._reserved.length){
+                    coon._reserved[0].conn.close((err:any) => {
+                        if(err) console.log('Reserved Connection closing issues::::')
+                        else console.log('Reserved Connection closed')
+                    })
+                }else{
+                    console.log('Reserved connection not found!')
+                }
 
-    //         }
-    //     }catch(err){
-    //         console.log('Connection close error:::::', err)
-    //     }
-    // }
+                if(coon._pool && coon._pool.length){
+                    coon._pool[0].conn.close((err:any) => {
+                        if(err) console.log('Pool Connection closing issues::::')
+                        else console.log('Pool Connection closed')
+                    })
+                }else{
+                    console.log('Pool connection not found!')
+                }
+                JdbcDriver.connection.delete(this.type)
+            }
+        }catch(err){
+            console.log('Connection close error:::::', err)
+        }
+    }
 
     protected executeQuery = async (sql:any) => {
         return new Promise(async (resolve, reject) => {
@@ -82,7 +99,10 @@ export default class JdbcDriver implements IDrivers{
                         else resolve(rows)
                         statement.close((err:any)=> {
                             if(err) console.log('Statement closing issues::::')
-                            else console.log('Statement closed')
+                            else {
+                                console.log('Statement closed')
+                                this.close()
+                            }
                         })
                     })                    
                 }
@@ -129,12 +149,14 @@ export default class JdbcDriver implements IDrivers{
     }
 
     protected init =async (connection:any) => {
-        connection.initialize((err: any) => {
-            if (err) {
-                console.log(err);
-                return;
-            }
-            JdbcDriver.connection.set(this.type, connection)
+        return new Promise(async (resolve, reject) => {
+            connection.initialize((err: any) => {
+                if (err) reject(err)
+                else {
+                    JdbcDriver.connection.set(this.type, connection)
+                    resolve('')
+                }
+            })
         })
     }
 }
