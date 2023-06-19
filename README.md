@@ -2,7 +2,7 @@
 JDBC API Wrapper for node.js, The API offers methods to open and close database connections, issue query and update statements, and also retrieve information -- such as table and column structure -- in a database-independent way.
 
 ## Latest Version
-- 1.1.1
+- 1.1.2
 
 ## Installation
 - Release: ```npm i --save node-jdbc-driver```
