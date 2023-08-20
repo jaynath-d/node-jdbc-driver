@@ -23,8 +23,7 @@ ConnectionType.sqlite // for sqlite connection
 
 const get_count = async () => {
     // const hive = new JdbcDriver(ConnectionType.hive, {host, port, database, username, password})
-    const jdbc = new JdbcDriver(ConnectionType.sqlite, {path: '/Users/jaynathray/Downloads/demo'})
-    // const count = await jdbc.sql('SELECT sum(total_rows),sum(compliant_rows), COUNT(total_rows)  from t_krhnz__dz.compliance_stats_spark')
+    const jdbc = new JdbcDriver(ConnectionType.sqlite, {path: '/Users/username/Downloads/demo'})
     const count = await jdbc.count('test')
     console.log('total count:', count)
 }
