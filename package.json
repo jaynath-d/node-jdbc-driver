@@ -1,6 +1,6 @@
 {
   "name": "node-jdbc-driver",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "This package is help to use jdbc connection",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
