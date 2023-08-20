@@ -6,6 +6,7 @@ import IDrivers from "./IDrivers";
 // Import all drivers
 import HiveDriver from "./hive/HiveDriver";
 import PostgreSQL from "./postgresql/PostgreSQL";
+import Sqlite from "./sqlite/Sqlite";
 
 // Import dependecies
 const jdbc = require('jdbc');
@@ -15,24 +16,26 @@ const path = require('path');
 // Connection Type
 export enum ConnectionType {
     hive = 'H', // using hive driver
-    // mysql = 'M', // using mysql driver
     postgreSql = 'P', // using postgre sql driver
+    sqlite = 'S', // using sqlite driver
 }
+
 
 const CType = {
     H: HiveDriver,
-    // M: '',
     P: PostgreSQL,
+    S: Sqlite,
 };
 
-export default class JdbcDriver implements IDrivers{
+
+export default class JdbcDriver<T extends ConnectionType> implements IDrivers{
     protected jarPath = '../drivers/';
     protected static connection: any = new Map();
     protected driverInstance:IConnectionType;
-    protected type: ConnectionType;
-    constructor(type: ConnectionType, connectionConfig: IConnectionConfig) {
+    protected type: T;
+    constructor(type: T, connectionConfig: IConnectionConfig<T>) {
         this.type = type
-        this.driverInstance = new CType[type](connectionConfig)
+        this.driverInstance = this.createDriverInstance(type, connectionConfig)
         if (!jinst.isJvmCreated()) {
             jinst.addOption('-Xrs');
             jinst.setupClasspath([path.join(__dirname, this.jarPath + this.driverInstance.driver)]);
@@ -41,11 +44,19 @@ export default class JdbcDriver implements IDrivers{
         JdbcDriver.connection.set(this.type, connection)
     }
 
+    protected createDriverInstance(type: T, config: IConnectionConfig<T>){
+        const DriverClass = CType[type];
+        if(!DriverClass){
+            throw new Error(`Invalid type ${type}`)
+        }
+        return new DriverClass(config as any)
+    }
+
     public get_version = () => this.driverInstance.get_version();
     public get_columns = async (tableName: string) => await this.sql(this.driverInstance.get_query(tableName, QueryType.columns))
     public get_table_properties = async (tableName: string) => await this.sql(this.driverInstance.get_query(tableName, QueryType.describe))
     public findAll = async (tableName:string) => await this.sql(`SELECT * FROM ${tableName}`)
-    public count = async (tableName: any) => await this.sql(`SELECT COUNT(*)  from ${tableName}`)
+    public count = async (tableName: any) => await this.sql(`SELECT COUNT(*) as total from ${tableName}`)
     public find = async (tableName: string, where: number|string = 1) => await this.sql(`SELECT * FROM ${tableName} WHERE ${where}`)
     public connection_count = () => JdbcDriver.connection.size;
     public connection_details = () => JdbcDriver.connection.entries();
@@ -57,32 +68,24 @@ export default class JdbcDriver implements IDrivers{
         }catch(err){
             console.log('Error in sql:::', err)
         }
-
     }
 
-    protected close = () => {
+    public ddl = async (sql:string) => {
+        try{
+            const res = this.executeUpdate(sql)
+            return res
+        }catch(err){
+            console.log('Error in ddl:::', err)
+        }
+    }
+
+    protected close = async (connObj:any) => {
         try{
             const coon = JdbcDriver.connection.get(this.type)
-            if(coon){
-                if(coon._reserved && coon._reserved.length){
-                    coon._reserved[0].conn.close((err:any) => {
-                        if(err) console.log('Reserved Connection closing issues::::')
-                        else console.log('Reserved Connection closed')
-                    })
-                }else{
-                    console.log('Reserved connection not found!')
-                }
-
-                if(coon._pool && coon._pool.length){
-                    coon._pool[0].conn.close((err:any) => {
-                        if(err) console.log('Pool Connection closing issues::::')
-                        else console.log('Pool Connection closed')
-                    })
-                }else{
-                    console.log('Pool connection not found!')
-                }
-                JdbcDriver.connection.delete(this.type)
-            }
+            coon.release(connObj,(err:any) => {
+                if(err) console.log('Connection relase issues::::')
+                else console.log('Connection relase')
+            })
         }catch(err){
             console.log('Connection close error:::::', err)
         }
@@ -90,22 +93,39 @@ export default class JdbcDriver implements IDrivers{
 
     protected executeQuery = async (sql:any) => {
         return new Promise(async (resolve, reject) => {
-            const statement: any = await this.createStatement()
-            statement.executeQuery(sql, async (err:any, resultset:any) => {
+            const stat: any = await this.createStatement()
+            stat[0].executeQuery(sql, async (err:any, resultset:any) => {
                 if(err) reject(err)
                 else {
                     await resultset.toObjArray((err:any, rows: any) => {
                         if (err) reject(err)
                         else resolve(rows)
-                        statement.close((err:any)=> {
-                            if(err) console.log('Statement closing issues::::')
+                        stat[0].close((err:any)=> {
+                            if(err) console.log('Statement closing issues...', err)
                             else {
-                                console.log('Statement closed')
-                                this.close()
+                                console.log('Statement closed.')
+                                this.close(stat[1])
                             }
                         })
                     })                    
                 }
+            })
+        })
+    }
+
+    protected executeUpdate = async (sql:any) => {
+        return new Promise(async (resolve, reject) => {
+            const stat: any = await this.createStatement()
+            stat[0].executeUpdate(sql, async (err:any, count:any) => {
+                if(err) reject(err)
+                else resolve(count)
+                stat[0].close((err:any)=> {
+                    if(err) console.log('Statement closing issues::::')
+                    else {
+                        console.log('Statement closed')
+                        this.close(stat[1])
+                    }
+                })
             })
         })
     }
@@ -118,7 +138,7 @@ export default class JdbcDriver implements IDrivers{
                 const conn = connObj.conn;
                 conn.createStatement((err:any, statement: any) => {
                     if(err) reject(err)
-                    else resolve(statement)
+                    else resolve([statement, connObj])
                 })
             }else{
                 reject('Connection object not found')
@@ -132,7 +152,9 @@ export default class JdbcDriver implements IDrivers{
             if (this.is_init(connection)){
                 resolve(connection._reserved[0])            
             }else{
-                await this.init(connection) 
+                if(!connection._pool.length){
+                    await this.init(connection)
+                } 
                 connection.reserve((err:any, connObj: any) => {
                     if (err) {
                         reject(err)
