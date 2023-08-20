@@ -1,12 +1,12 @@
 import IConnectionType, { QueryType } from '../IConnectionType';
-import IConnectionConfig from '../IConnectionConfig';
+import { BaseConfig } from '../IConnectionConfig';
 
 export default class HiveDriver implements IConnectionType{
-    protected config: IConnectionConfig;
+    protected config: BaseConfig;
     protected driverName:string = 'org.apache.hive.jdbc.HiveDriver'
     protected driverVersion:string = '2.6.3.0-235';
     public driver: string = `hive-jdbc-uber-${this.driverVersion}.jar`
-    constructor(config: IConnectionConfig) {
+    constructor(config: BaseConfig) {
         this.config = config
     }
 
