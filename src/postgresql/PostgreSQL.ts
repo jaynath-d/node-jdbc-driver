@@ -1,13 +1,13 @@
 
 import IConnectionType, { QueryType } from '../IConnectionType';
-import IConnectionConfig from '../IConnectionConfig';
+import {BaseConfig} from '../IConnectionConfig';
 
 export default class PostgreSQL implements IConnectionType{
-    protected config: IConnectionConfig;
+    protected config: BaseConfig;
     protected driverName:string = 'org.postgresql.Driver';
     protected driverVersion:string = '42.6.0';
     public driver: string = `postgresql-${this.driverVersion}.jar`;
-    constructor(config: IConnectionConfig) {
+    constructor(config: BaseConfig) {
         this.config = config
     }
 
