@@ -1,58 +1,118 @@
-# node-jdbc-driver
-JDBC API Wrapper for node.js, The API offers methods to open and close database connections, issue query and update statements, and also retrieve information -- such as table and column structure -- in a database-independent way. 
+# node-jdbc-driver 
+`node-jdbc-driver` is a JDBC API wrapper for Node.js, providing methods to manage database connections, execute queries and update statements, and retrieve database information such as table and column structures in a database-independent manner.
 
 ## Latest Version
-- 1.1.2
+![Latest Version](https://img.shields.io/github/v/release/jaynath-d/node-jdbc-driver)
+![npm downloads](https://img.shields.io/npm/dw/node-jdbc-driver)
 
 ## Installation
-- Release: ```npm i --save node-jdbc-driver```
+To install the package, use the following command:
+```sh
+npm install --save node-jdbc-driver
+```
 
 ## Usage
-Some mininal examples are given below.
+Below are some minimal usage examples demonstrating how to use the `node-jdbc-driver` package.
 
-### Initialize
+### Initialization
+You can initialize the JDBC driver using either CommonJS or ES6 syntax:
 ```javascript
 // CommonJS
-const { default: JdbcDriver, ConnectionType } = require("node-jdbc-driver")
-// ES6
-import JdbcDriver, { ConnectionType } from 'node-jdbc-driver'
+const { default: JdbcDriver, ConnectionType } = require("node-jdbc-driver");
 
-// Set the connection details for the JDBC connection
+// ES6
+import JdbcDriver, { ConnectionType } from 'node-jdbc-driver';
+```
+### Connection Setup
+For different types of databases, you need to provide specific connection details.
+
+#### Available Connection types
+```javascript
+ConnectionType.hive // for hive connection
+ConnectionType.postgreSql // for postgreSql connection
+ConnectionType.sqlite // for sqlite connection
+```
+
+#### Hive and PostgreSQL Connection
+For Hive and PostgreSQL connections, provide the host, port, database name, username, and password:
+```javascript
 const host = '<host>';
 const port = '<port>';
 const database = '<database_name>';
 const username = '<username>';
 const password = '<password>';
 
-// Choose connection type
-ConnectionType.hive // for hive connection
-ConnectionType.postgreSql // for postgreSql connection
+// Set optional parameters
+const minpoolsize = '<min_pool_size>'
+const maxpoolsize = '<max_pool_size>'
 
-// Create jdbc connection
-const jdbc = new JdbcDriver(ConnectionType.postgreSql, {host, port, database, username, password})
+// For Hive
+const jdbc = new JdbcDriver(ConnectionType.hive, { host, port, database, username, password });
+// For PostgreSql
+const jdbc = new JdbcDriver(ConnectionType.postgreSql, { host, port, database, username, password });
+```
+#### SQLite Connection
+For SQLite connections, provide the path to the SQLite database file:
+```javascript
+const path = '<db_path>';
 
-// check driver version
-const version = jdbc.get_version()
+// Set optional parameters
+const minpoolsize = '<min_pool_size>'
+const maxpoolsize = '<max_pool_size>'
 
-// count example
-const total = await jdbc.count('<table_name>')
-
-// find example
-const row = await jdbc.find('<table_name>', '<where_clouse>')
-
-// find all example
-const rows = await jdbc.findAll('<table_name>')
-
-// sql example
-const results = await jdbc.sql('<sql_query>')
-
-// list table columns
-const columns = await jdbc.get_columns('<table_name>')
-
-// describe table properties
-const tblproperties = await jdbc.get_table_properties('<table_name>')
+const jdbc = new JdbcDriver(ConnectionType.sqlite, { path });
 ```
 
+## Basic Operations
+Here are some basic operations you can perform using the `node-jdbc-driver`:
 
+### Check Driver Version
+You can check the driver version using the following method:
+```javascript
+const version = jdbc.get_version();
+```
 
+### Count Example
+To count the number of rows in a table:
+```javascript
+const total = await jdbc.count('<table_name>');
+```
 
+### Find Example
+To find a single row based on a WHERE clause:
+```javascript
+const row = await jdbc.find('<table_name>', '<where_clause>');
+```
+
+### Find All Example
+To retrieve all rows from a table:
+```javascript
+const rows = await jdbc.findAll('<table_name>');
+```
+
+### SQL Query Example
+To execute a custom SQL query:
+```javascript
+const results = await jdbc.sql('<sql_query>');
+```
+
+### DDL Example
+To execute Data Definition Language (DDL) queries:
+```javascript
+const results = await jdbc.ddl('<sql_query>');
+```
+
+### List Table Columns
+To retrieve information about table columns:
+```javascript
+const columns = await jdbc.get_columns('<table_name>');
+```
+
+### Describe Table Properties
+To get properties of a table:
+```javascript
+const tblProperties = await jdbc.get_table_properties('<table_name>');
+```
+
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
