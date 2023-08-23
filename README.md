@@ -1,10 +1,12 @@
-# node-jdbc-driver 
-`node-jdbc-driver` is a JDBC API wrapper for Node.js, providing methods to manage database connections, execute queries and update statements, and retrieve database information such as table and column structures in a database-independent manner.
+<div align="center">
+	<h1>Node JDBC Driver</h1> 
+	<br>
+	<p>node-jdbc-driver is a JDBC API wrapper for Node.js, providing methods to manage database connections, execute queries and update statements, and retrieve database information such as table and column structures in a database-independent manner.</p>
+	<a href="https://www.npmjs.com/package/node-jdbc-driver"><img src="https://img.shields.io/npm/dw/node-jdbc-driver" alt="Downloads"></a>
+	<a href="https://www.npmjs.com/package/node-jdbc-driver"><img src="https://img.shields.io/npm/v/node-jdbc-driver" alt="Npm version"></a>
+</div>
 
-## Latest Version
-![Latest Version](https://img.shields.io/github/v/release/jaynath-d/node-jdbc-driver)
-![npm downloads](https://img.shields.io/npm/dw/node-jdbc-driver)
-
+---
 ## Installation
 To install the package, use the following command:
 ```sh
@@ -31,6 +33,7 @@ For different types of databases, you need to provide specific connection detail
 ConnectionType.hive // for hive connection
 ConnectionType.postgreSql // for postgreSql connection
 ConnectionType.sqlite // for sqlite connection
+ConnectionType.custom // Establish a JDBC connection using a custom driver
 ```
 
 #### Hive and PostgreSQL Connection
@@ -48,8 +51,17 @@ const maxpoolsize = '<max_pool_size>'
 
 // For Hive
 const jdbc = new JdbcDriver(ConnectionType.hive, { host, port, database, username, password });
+
+// For Hive with connection url
+const jdbcUrl = 'jdbc:hive2://<host>:<port>/<database>'
+const jdbc = new JdbcDriver(ConnectionType.hive, { jdbcUrl, username, password });
+
 // For PostgreSql
 const jdbc = new JdbcDriver(ConnectionType.postgreSql, { host, port, database, username, password });
+
+// For PostgreSql with connection url
+const jdbcUrl = 'jdbc:postgresql://<host>:<port>/<database>'
+const jdbc = new JdbcDriver(ConnectionType.postgreSql, { jdbcUrl, username, password });
 ```
 #### SQLite Connection
 For SQLite connections, provide the path to the SQLite database file:
@@ -61,6 +73,23 @@ const minpoolsize = '<min_pool_size>'
 const maxpoolsize = '<max_pool_size>'
 
 const jdbc = new JdbcDriver(ConnectionType.sqlite, { path });
+```
+
+#### JDBC Connection using custom driver
+```javascript
+ const jdbc = new JdbcDriver(ConnectionType.custom, {
+        jars: 'sqlite-jdbc-3.7.2.jar', // local path of your jar file
+        driverClass: 'org.sqlite.JDBC', // Driver class of your jar file
+        jdbcUrl: 'jdbc:sqlite:/Users/jaynathray/Downloads/demo' // use jdbc url for connection
+})
+```
+
+```javascript
+ const jdbc = new JdbcDriver(ConnectionType.custom, {
+        jars: 'sqlite-jdbc-3.7.2.jar', // local path of your jar file
+        driverClass: 'org.sqlite.JDBC', // Driver class of your jar file
+        path: '/Users/jaynathray/Downloads/demo' // use path for connection
+})
 ```
 
 ## Basic Operations

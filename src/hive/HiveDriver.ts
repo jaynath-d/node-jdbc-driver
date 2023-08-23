@@ -14,8 +14,10 @@ export default class HiveDriver implements IConnectionType{
         return {
             url: this.get_jdbcUrl(),
             drivername: this.driverName,
-            user: this.config.username,
-            password: this.config.password
+            ...(this.config.username && {user: this.config.username}),
+            ...(this.config.password && {password: this.config.password}),
+            ...(this.config.minpoolsize && {minpoolsize: this.config.minpoolsize}),
+            ...(this.config.maxpoolsize && {maxpoolsize: this.config.maxpoolsize}),
         }
     }
 
@@ -30,7 +32,11 @@ export default class HiveDriver implements IConnectionType{
     }
 
     protected get_jdbcUrl = () => {
-        const {host, port, database, } = this.config
-        return `jdbc:hive2://${host}:${port}/${database}`;
+        if (this.config.jdbcUrl){
+            return this.config.jdbcUrl
+        }else{
+            const {host, port, database, } = this.config
+            return `jdbc:hive2://${host}:${port}/${database}`;
+        }
     }
 }

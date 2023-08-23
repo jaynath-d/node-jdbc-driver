@@ -1,20 +1,24 @@
 
 import IConnectionType, { QueryType } from '../IConnectionType';
-import {BaseConfig} from '../IConnectionConfig';
+import {CustomDriverConfig} from '../IConnectionConfig';
 
-export default class PostgreSQL implements IConnectionType{
-    protected config: BaseConfig;
-    protected driverName:string = 'org.postgresql.Driver';
-    protected driverVersion:string = '42.6.0';
-    public driver: string = `postgresql-${this.driverVersion}.jar`;
-    constructor(config: BaseConfig) {
+export default class CustomDriver implements IConnectionType{
+    protected config: CustomDriverConfig;
+    protected driverName:string;
+    protected driverVersion:any;
+    protected regex = /(\d+(\.\d+)+-\d+|\d+(\.\d+)+)/;
+    public driver: string;
+    constructor(config: CustomDriverConfig) {
         this.config = config
+        this.driverName = this.config.driverClass.split('.')[1];
+        this.driver = this.config.jars
+        this.driverVersion = this.driver.match(this.regex)?.[1]
     }
 
     public get_config = () => {
         return {
             url: this.get_jdbcUrl(),
-            drivername: this.driverName,
+            drivername: this.config.driverClass,
             ...(this.config.username && {user: this.config.username}),
             ...(this.config.password && {password: this.config.password}),
             ...(this.config.minpoolsize && {minpoolsize: this.config.minpoolsize}),
@@ -36,9 +40,11 @@ export default class PostgreSQL implements IConnectionType{
     protected get_jdbcUrl = () => {
         if (this.config.jdbcUrl){
             return this.config.jdbcUrl
+        }else if(this.config.path){
+            return `jdbc:${this.driverName}://${this.config.path}`
         }else{
             const {host, port, database, } = this.config
-            return `jdbc:postgresql://${host}:${port}/${database}`;
+            return `jdbc:${this.driverName}://${host}:${port}/${database}`;
         }
     }
 }
