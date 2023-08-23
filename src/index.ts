@@ -7,6 +7,7 @@ import IDrivers from "./IDrivers";
 import HiveDriver from "./hive/HiveDriver";
 import PostgreSQL from "./postgresql/PostgreSQL";
 import Sqlite from "./sqlite/Sqlite";
+import CustomDriver from "./custom/driver";
 
 // Import dependecies
 const jdbc = require('jdbc');
@@ -18,6 +19,7 @@ export enum ConnectionType {
     hive = 'H', // using hive driver
     postgreSql = 'P', // using postgre sql driver
     sqlite = 'S', // using sqlite driver
+    custom = 'C', // Connect any jdbc connection using custom driver
 }
 
 
@@ -25,6 +27,7 @@ const CType = {
     H: HiveDriver,
     P: PostgreSQL,
     S: Sqlite,
+    C: CustomDriver
 };
 
 
@@ -38,7 +41,7 @@ export default class JdbcDriver<T extends ConnectionType> implements IDrivers{
         this.driverInstance = this.createDriverInstance(type, connectionConfig)
         if (!jinst.isJvmCreated()) {
             jinst.addOption('-Xrs');
-            jinst.setupClasspath([path.join(__dirname, this.jarPath + this.driverInstance.driver)]);
+            jinst.setupClasspath([path.join(__dirname, `${type === 'C'? '' : this.jarPath}${this.driverInstance.driver}`)]);
         }
         const connection = new jdbc(this.driverInstance.get_config())
         JdbcDriver.connection.set(this.type, connection)
