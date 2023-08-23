@@ -7,16 +7,39 @@
 </div>
 
 ---
+
+<!-- DOC -->
+- [Features](#features)
+- [Installation](#installation)
+- [Loading and configuring the module](#loading-and-configuring-the-module)
+- [Common Usage](#common-usage)
+<!-- /DOC -->
+
+## Features
+- **Simplified JDBC Usage**: Provides an intuitive API to manage JDBC database connections, execute queries, and handle update statements, abstracting away low-level complexities.
+
+- **Multiple Database Support**: Seamlessly connect to different types of databases, including Hive, PostgreSQL, and SQLite, with a unified interface.
+
+- **Flexible Configuration**: Easily configure database connections using either host, port, database name, username, and password or via custom JDBC connection with driver jars and connection URLs.
+
+- **Connection Pooling**: Benefit from built-in connection pooling support to efficiently manage and reuse database connections, enhancing application performance.
+
+- **Query Execution**: Execute custom SQL queries and retrieve results in a straightforward manner, enabling you to interact with your database effortlessly.
+
+- **Database Structure Information**: Retrieve comprehensive information about table and column structures using simple methods, enabling you to work with your database schema efficiently.
+
+- **Data Manipulation**: Perform essential data manipulation tasks such as counting rows, finding rows based on criteria, retrieving all rows from a table, and more.
+
+- **Data Definition Language (DDL) Support**: Execute DDL queries to manage the structure of your database, including creating and altering tables, views, and indexes.
+
+
 ## Installation
 To install the package, use the following command:
 ```sh
 npm install --save node-jdbc-driver
 ```
 
-## Usage
-Below are some minimal usage examples demonstrating how to use the `node-jdbc-driver` package.
-
-### Initialization
+### Loading and configuring the module
 You can initialize the JDBC driver using either CommonJS or ES6 syntax:
 ```javascript
 // CommonJS
@@ -25,6 +48,11 @@ const { default: JdbcDriver, ConnectionType } = require("node-jdbc-driver");
 // ES6
 import JdbcDriver, { ConnectionType } from 'node-jdbc-driver';
 ```
+
+
+## Common Usage
+Below are some minimal usage examples demonstrating how to use the `node-jdbc-driver` package.
+
 ### Connection Setup
 For different types of databases, you need to provide specific connection details.
 
