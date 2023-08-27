@@ -2,8 +2,12 @@
 	<h1>Node JDBC Driver</h1> 
 	<br>
 	<p>node-jdbc-driver is a JDBC API wrapper for Node.js, providing methods to manage database connections, execute queries and update statements, and retrieve database information such as table and column structures in a database-independent manner.</p>
+	<a href="https://packagephobia.now.sh/result?p=node-jdbc-driver"><img src="https://badgen.net/packagephobia/install/node-jdbc-driver" alt="Bundle size"></a>
+	<a href="https://img.shields.io/badge/dependencies-up--to--date-brightgreen.svg"><img src="https://img.shields.io/badge/dependencies-up--to--date-brightgreen.svg" alt="Dependencies upto date"></a>
+	<a href="https://img.shields.io/badge/status-stable-brightgreen.svg"><img src="https://img.shields.io/badge/status-stable-brightgreen.svg" alt="Status"></a>
 	<a href="https://www.npmjs.com/package/node-jdbc-driver"><img src="https://img.shields.io/npm/dw/node-jdbc-driver" alt="Downloads"></a>
-	<a href="https://www.npmjs.com/package/node-jdbc-driver"><img src="https://img.shields.io/npm/v/node-jdbc-driver" alt="Npm version"></a>
+	<a href="https://www.npmjs.com/package/node-jdbc-driver"><img src="https://img.shields.io/npm/v/node-jdbc-driver" alt="Npm version"></a><br />
+	<a href="mail-pcode027@gmail.com"><img src="https://img.shields.io/badge/author-pcode027@gmail.com-blue.svg" alt="Author"></a>
 </div>
 
 ---
