@@ -2,7 +2,7 @@
 	<h1>Node JDBC Driver</h1> 
 	<br>
 	<p>node-jdbc-driver is a JDBC API wrapper for Node.js, providing methods to manage database connections, execute queries and update statements, and retrieve database information such as table and column structures in a database-independent manner.</p>
-	<a href="https://packagephobia.now.sh/result?p=node-jdbc-driver"><img src="https://badgen.net/packagephobia/install/node-jdbc-driver" alt="Bundle size"></a>
+<!-- 	<a href="https://packagephobia.now.sh/result?p=node-jdbc-driver"><img src="https://badgen.net/packagephobia/install/node-jdbc-driver" alt="Bundle size"></a> -->
 	<a href="https://img.shields.io/badge/dependencies-up--to--date-brightgreen.svg"><img src="https://img.shields.io/badge/dependencies-up--to--date-brightgreen.svg" alt="Dependencies upto date"></a>
 	<a href="https://img.shields.io/badge/status-stable-brightgreen.svg"><img src="https://img.shields.io/badge/status-stable-brightgreen.svg" alt="Status"></a>
 	<a href="https://www.npmjs.com/package/node-jdbc-driver"><img src="https://img.shields.io/npm/dw/node-jdbc-driver" alt="Downloads"></a>
@@ -22,7 +22,7 @@
 ## Features
 - **Simplified JDBC Usage**: Provides an intuitive API to manage JDBC database connections, execute queries, and handle update statements, abstracting away low-level complexities.
 
-- **Multiple Database Support**: Seamlessly connect to different types of databases, including Hive, PostgreSQL, and SQLite, with a unified interface.
+- **Multiple Database Support**: Seamlessly connect to different types of databases, including Hive, PostgreSQL, Tibero, and SQLite, with a unified interface.
 
 - **Flexible Configuration**: Easily configure database connections using either host, port, database name, username, and password or via custom JDBC connection with driver jars and connection URLs.
 
@@ -65,6 +65,7 @@ For different types of databases, you need to provide specific connection detail
 ConnectionType.hive // for hive connection
 ConnectionType.postgreSql // for postgreSql connection
 ConnectionType.sqlite // for sqlite connection
+ConnectionType.tibero // for tibero connection
 ConnectionType.custom // Establish a JDBC connection using a custom driver
 ```
 
@@ -94,6 +95,9 @@ const jdbc = new JdbcDriver(ConnectionType.postgreSql, { host, port, database, u
 // For PostgreSql with connection url
 const jdbcUrl = 'jdbc:postgresql://<host>:<port>/<database>'
 const jdbc = new JdbcDriver(ConnectionType.postgreSql, { jdbcUrl, username, password });
+
+// For tibero connection
+const jdbc = new JdbcDriver(ConnectionType.tibero, { host, port, database, username, password });
 ```
 #### SQLite Connection
 For SQLite connections, provide the path to the SQLite database file:
