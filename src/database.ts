@@ -1,4 +1,3 @@
-import fs from 'node-fs-utils';
 import {db, DriverType,DriverConfig,  QueryType } from './IDatabase';
 import { BaseConfig } from './IConfig';
 
