@@ -1,6 +1,6 @@
 {
   "name": "node-jdbc-driver",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "description": "This package is help to use jdbc connection",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -15,7 +15,10 @@
     "node-jdbc",
     "jdbc-driver",
     "hive-jdbc",
-    "postgre"
+    "postgresql",
+    "tibero",
+    "hive",
+    "sqlite"
   ],
   "devDependencies": {
     "@types/node": "^20.2.1",
