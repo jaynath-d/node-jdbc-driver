@@ -26,8 +26,7 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
-    "jdbc": "^0.7.6",
-    "node-fs-utils": "^0.3.1"
+    "jdbc": "^0.7.6"
   },
   "repository": {
     "type": "git",
