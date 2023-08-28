@@ -7,6 +7,10 @@ interface OptionalConfig{
     maxpoolsize?: number;
 }
 
+interface Sqlite extends OptionalConfig{
+    path: string;
+}
+
 interface AuthConfig extends OptionalConfig{
     username?: string;
     password?: string;
@@ -16,33 +20,33 @@ interface JDBCConfig{
     jdbcUrl: string;
 }
 
-interface HostConfig extends AuthConfig{
+interface HostConfig extends AuthConfig, Partial<Sqlite>{
     host: string;
     port: number;
     database: string;
 }
 
-interface PathConfig extends OptionalConfig{
-    path: string;
-}
+
 
 type H = MakeNever<JDBCConfig> & HostConfig
 type J = MakeNever<HostConfig> & JDBCConfig
 
-export type BaseConfig = H | J
+export type BaseConfig = H | J 
 
-export interface SQLiteConfig extends OptionalConfig{
-    path: string;
-}
+export type SQLiteConfig = Sqlite | JDBCConfig
 
-export interface CustomDriverConfig extends Partial<HostConfig>, Partial<SQLiteConfig>, Partial<JDBCConfig>{
+// export interface SQLiteConfig extends OptionalConfig{
+//     path: string;
+// }
+
+export interface CustomDriverConfig extends Partial<HostConfig>, Partial<Sqlite>, Partial<JDBCConfig>{
     jars: string,
     driverClass: string
 };
 
 type IConnectionConfig<T> =
-    T extends 'S' ? SQLiteConfig :
-    T extends 'C' ? CustomDriverConfig :
+    T extends 'sqlite' ? SQLiteConfig :
+    T extends 'custom' ? CustomDriverConfig :
     BaseConfig; 
 
 export default IConnectionConfig
