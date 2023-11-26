@@ -8,7 +8,7 @@
     "example": "ts-node src/example.ts",
     "build": "tsc",
     "test": "jest --detectOpenHandles",
-    "test:c": "jest --coverage"
+    "test:c": "jest --coverage --runInBand --detectOpenHandles --forceExit"
   },
   "keywords": [
     "node-jdbc-driver",
