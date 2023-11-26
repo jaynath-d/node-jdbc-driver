@@ -14,7 +14,7 @@ const path = require('path');
 // Connection Type
 export enum ConnectionType {
     hive = 'hive', // using hive driver
-    postgreSql = 'postgreSql', // using postgre sql driver
+    postgreSql = 'postgresql', // using postgre sql driver
     sqlite = 'sqlite', // using sqlite driver
     tibero = 'tibero', // using tibero driver
     custom = 'custom', // Connect any jdbc connection using custom driver
