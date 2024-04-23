@@ -39,7 +39,11 @@ export default class DatabaseDriver implements DriverType {
             return `jdbc:${this.driver.connectionType}://${this.config.path}`
         } else {
             const { host, port, database, } = this.config
-            return `jdbc:${this.driver.connectionType}://${host}:${port}/${database}`;
+            if (this.driver.connectionType == 'tibero:thin') {      // is this tibero
+                return `jdbc:${this.driver.connectionType}:@${host}:${port}:${database}`;
+            } else {                                                // etc
+                return `jdbc:${this.driver.connectionType}://${host}:${port}/${database}`;
+            }
         }
     }
 
