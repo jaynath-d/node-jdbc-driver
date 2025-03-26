@@ -39,5 +39,13 @@
   },
   "author": "Jaynath Ray <pcode027@gmail.com>",
   "license": "ISC",
-  "readmeFilename": "README.md"
+  "readmeFilename": "README.md",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "java"
+    ],
+    "overrides": {
+      "java": "github:joeferner/node-java#v0.14.0"
+    }
+  }
 }
